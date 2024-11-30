@@ -66,5 +66,39 @@ class Timer:
         else:
             print(f'Échec de la requête. Code de statut : {response.status_code}')
             return False
+
+    def post(self, data):
+        headers = {
+            'Content-Type': 'application/json',
+            'accept': '*/*'
+        }
+
+        hours = data.get('hours')
+        minutes = data.get('minutes')
+        seconds = data.get('seconds')
+        name = data.get('clock_name')
+
+        seconds = int(seconds)
+        seconds += int(minutes) * 60
+        seconds += int(hours) * 3600
+
+        data = {
+            "allows_overrun": True,
+            "countdown": {
+                "duration": seconds
+            },
+            "name": name
+        }
+
+        json_data = json.dumps(data)
+
+        response = requests.post(f"{self.url}s", headers=headers, data=json_data)
+
+        if response.status_code == 200:
+            print(f"Clock {name} ajouté")
+            return True
+        else:
+            print(f'Échec de la requête. Ajout clock, Code de statut : {response.status_code}')
+            return False
     
     

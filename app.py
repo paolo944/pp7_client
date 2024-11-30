@@ -54,5 +54,15 @@ def modify_timer(uuid):
     result = timer.modify(uuid)
     return jsonify({'result': result})
 
+@app.route('/timer', methods=['POST'])
+def post_timer():
+    data = request.get_json()
+    hours = data.get('hours')
+    minutes = data.get('minutes')
+    seconds = data.get('seconds')
+    print(f"Received time: {hours}:{minutes}:{seconds}")
+    result = timer.post(data)
+    return jsonify({'result': result})
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

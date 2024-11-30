@@ -11,7 +11,7 @@
 <body>
     <h1>Client PP7 Hillsong Paris</h1>
     <form id="stage_msg">
-        <input type="text" id="user-stage-msg" name="user_stage_msg" placeholder="Envoyer msg prompteur" required>
+        <input type="text" id="user-stage-msg" name="user_stage_msg" placeholder="Envoyer msg prompteur">
         <button type="submit" id="send">Envoyer</button>
         <button type="sumbit" id="delete">Supprimer</button>
     </form>
@@ -24,9 +24,18 @@
         <h3 id="video-container"></h3>
     </div>
 
-    <script>
-        
+    <div class="form-container">
+        <h2>Ajouter Clock</h2>
+        <label for="clock_name">Nom</label>
+        <input type="text" id="clock_name" required>
+        <label for="hours">Heures:</label>
+        <input type="number" id="hours" min="0" max="23" value="0" required>
+        <label for="minutes">Minutes:</label>
+        <input type="number" id="minutes" min="0" max="59" value="0" required>
+        <label for="seconds">Secondes:</label>
+        <input type="number" id="seconds" min="0" max="59" value="0" required>
+        <button id="submit-button">Ajouter</button>
+    </div>
 
-    </script>
 </body>
 </html>

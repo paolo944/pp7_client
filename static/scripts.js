@@ -47,6 +47,35 @@ document.getElementById('stage_msg').addEventListener('submit', function(event) 
     }
 });
 
+document.getElementById('submit-button').addEventListener('click', () => {
+    const name = document.getElementById('clock_name').value;
+    const hours = document.getElementById('hours').value;
+    const minutes = document.getElementById('minutes').value;
+    const seconds = document.getElementById('seconds').value;
+
+    const timeData = {
+        clock_name: name,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+    };
+
+    fetch('/timer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(timeData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Résultat pour ajout clock: ', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+
 function fetchStreamData() {
     const eventSource = new EventSource('/current_status_stream');
     const timeContainer = document.getElementById('time-container');
