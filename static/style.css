@@ -45,3 +45,18 @@ button {
 .blinking {
     animation: blink 1s infinite;
 }
+
+.button-container {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+
+}
+.button-container i {
+    margin-right: 10px;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 10px;
+}

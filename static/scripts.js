@@ -35,7 +35,7 @@ document.getElementById('stage_msg').addEventListener('submit', function(event) 
             var pl = document.getElementById('user-stage-msg');
             if(data.result){
                 resultContainer.innerHTML =  '';
-                pl.placeholder = 'Envoyer un message au prompteur';
+                pl.placeholder = 'Envoyer msg prompteur';
             }
             else{
                 resultContainer.innerHTML =  "Erreur, message non supprimé";
@@ -46,7 +46,6 @@ document.getElementById('stage_msg').addEventListener('submit', function(event) 
         });
     }
 });
-
 
 function fetchStreamData() {
     const eventSource = new EventSource('/current_status_stream');
@@ -94,9 +93,45 @@ function fetchStreamData() {
                             break;
                     }
 
+                    const delete_timer = document.createElement('button');
+                    const delete_icon = document.createElement('i');
+                    delete_icon.classList.add('fa-solid', 'fa-trash');
+                    delete_timer.appendChild(delete_icon);
+                    delete_timer.classList.add('button-container');
+                    delete_timer.addEventListener('click', () => deleteTimer(timer.id.uuid));
+
+                    const pause_timer = document.createElement('button');
+                    pause_timer.classList.add('button-container');
+                    if(timer.state != "stopped"){
+                        const pause_icon = document.createElement('i');
+                        pause_icon.classList.add('fa-solid', 'fa-stop');
+                        pause_timer.appendChild(pause_icon);
+                        pause_timer.addEventListener('click', () => pauseTimer(timer.id.uuid));
+                    }
+                    else{
+                        const play_icon = document.createElement('i');
+                        play_icon.classList.add('fa-solid', 'fa-play');
+                        pause_timer.appendChild(play_icon);
+                        pause_timer.addEventListener('click', () => playTimer(timer.id.uuid));
+                    }
+
+                    const reset_timer = document.createElement('button');
+                    reset_timer.classList.add('button-container');
+                    const reset_icon = document.createElement('i');
+                    reset_icon.classList.add('fa-solid', 'fa-rotate');
+                    reset_timer.appendChild(reset_icon);
+                    reset_timer.addEventListener('click', () => resetTimer(timer.id.uuid));
+
+                    const buttonsContainer = document.createElement('div');
+                    buttonsContainer.classList.add('buttons-container');
+                    buttonsContainer.appendChild(pause_timer);
+                    buttonsContainer.appendChild(reset_timer);
+                    buttonsContainer.appendChild(delete_timer);
+            
                     h3Element.appendChild(clockName);
                     h3Element.appendChild(time);
                     clockContainer.appendChild(h3Element);
+                    clockContainer.appendChild(buttonsContainer);
                 }
             }
             else if(data.url == "timer/video_countdown"){
@@ -129,6 +164,74 @@ function fetchStreamData() {
     eventSource.onopen = function(event) {
         console.log('EventSource opened');
     };
+}
+
+function pauseTimer(uuid) {
+    fetch(`/timer/pause/${uuid}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+
+    .then(response => response.json())
+    .then(data => {
+        console.log(`pause_timer: ${data.result}`);
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+    });
+}
+
+function playTimer(uuid) {
+    fetch(`/timer/play/${uuid}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+
+    .then(response => response.json())
+    .then(data => {
+        console.log(`play_timer: ${data.result}`);
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+    });
+}
+
+function resetTimer(uuid) {
+    fetch(`/timer/reset/${uuid}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+
+    .then(response => response.json())
+    .then(data => {
+        console.log(`reset_timer: ${data.result}`);
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+    });
+}
+
+function deleteTimer(uuid) {
+    fetch(`/timer/${uuid}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+
+    .then(response => response.json())
+    .then(data => {
+        console.log(`delete_timer: ${data.result}`);
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+    });
 }
 
 // Appeler la fonction fetchStreamData une fois au chargement de la page
