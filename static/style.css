@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#result-container {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.status-running {
+    color: green;
+}
+
+.status-overrun {
+    color: red;
+}
+
+.status-stopped {
+    color: orange;
+}
+
+@keyframes blink {
+    0% { color: red; }
+    50% { color: transparent; }
+    100% { color: red; }
+}
+
+.blinking {
+    animation: blink 1s infinite;
+}

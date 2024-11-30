@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client PP7 Hillsong Paris</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='scripts.js') }}"></script>
+</head>
+<body>
+    <h1>Client PP7 Hillsong Paris</h1>
+    <form id="stage_msg">
+        <input type="text" id="user-stage-msg" name="user_stage_msg" placeholder="Envoyer un message au prompteur" required>
+        <button type="submit" id="send">Envoyer</button>
+        <button type="sumbit" id="delete">Supprimer</button>
+    </form>
+
+    <div id="result-container"></div>
+    <div id="stream-data-container">
+        <h3 id="time-container"></h3>
+        <h3 id="stage-message-container"></h3>
+        <h3 id="clock-container"></h3>
+        <h3 id="video-container"></h3>
+    </div>
+
+    <script>
+        
+
+    </script>
+</body>
+</html>
