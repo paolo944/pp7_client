@@ -60,3 +60,8 @@ button {
     display: flex;
     gap: 10px;
 }
+
+.ALERT {
+    background-color: red;
+    padding: 10px;
+}

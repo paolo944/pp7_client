@@ -24,8 +24,13 @@ class Stream:
 
         response = requests.post(f'{self.url}updates', headers=headers, data=json_data, stream=True)
 
-        if response.status_code != 200:
+        if response.status_code == 400:
             print(f'Échec de la requête Status. Code de statut : {response.status_code}')
+            yield jsonify({'data': "400"})
+            return
+        elif response.status_code == 404:
+            print(f'Application ProPresenter non détécté')
+            yield jsonify({'data': "404"})
             return
 
         buffer = b''

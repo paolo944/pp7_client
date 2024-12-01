@@ -187,6 +187,8 @@ function fetchStreamData() {
 
     eventSource.onerror = function(event) {
         console.error('EventSource failed:', event);
+        timeContainer.innerHTML ="PROPRESENTER NON CONNECTE";
+        timeContainer.classList.add('ALERT');
         eventSource.close();
     };
 
