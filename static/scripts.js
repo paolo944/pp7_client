@@ -2,7 +2,7 @@ document.getElementById('stage_msg').addEventListener('submit', function(event) 
     event.preventDefault();
 
     const userInput = document.getElementById('user-stage-msg').value;
-    const buttonId = event.submitter.id;
+    const buttonId = event.submitter ? event.submitter.id : event.target.id;
 
     if(buttonId == "send"){
         fetch('/stage/send_msg', {
@@ -12,11 +12,10 @@ document.getElementById('stage_msg').addEventListener('submit', function(event) 
             },
             body: JSON.stringify({ user_input: userInput })
         })
-
         .then(response => response.json())
         .then(data => {
             const resultContainer = document.getElementById('result-container');
-            resultContainer.innerHTML = data.result ? "" : "Erreur, message non enovyé";
+            resultContainer.innerHTML = data.result ? "" : "Erreur, message non envoyé";
         })
         .catch(error => {
             console.error('Erreur:', error);
@@ -110,7 +109,9 @@ function fetchStreamData() {
                     const clockName = document.createTextNode(`${timer.id.name}: `);
                     const time = document.createElement('span');
                     time.textContent = `${timer.time}`;
-                    
+                    const clockContainerElement = document.createElement('div');
+                    clockContainerElement.classList.add('clock-container');
+
                     switch (timer.state) {
                         case 'running':
                             time.classList.add('status-running');
@@ -162,11 +163,13 @@ function fetchStreamData() {
                     buttonsContainer.appendChild(pause_timer);
                     buttonsContainer.appendChild(reset_timer);
                     buttonsContainer.appendChild(delete_timer);
-            
+
                     h3Element.appendChild(clockName);
                     h3Element.appendChild(time);
-                    clockContainer.appendChild(h3Element);
-                    clockContainer.appendChild(buttonsContainer);
+                    clockContainerElement.appendChild(h3Element);
+                    clockContainerElement.appendChild(buttonsContainer);
+
+                    clockContainer.appendChild(clockContainerElement);
                 }
             }
             else if(data.url == "timer/video_countdown"){
@@ -175,7 +178,7 @@ function fetchStreamData() {
                 if(vTimer != "0:00:00"){
                     const time = document.createElement('span');
                     time.textContent = `${vTimer}`;
-                    const clockName = document.createTextNode(`Temps restant vidéo: `);                    
+                    const clockName = document.createTextNode(`Temps restant vidéo: `);
                     if(parseInt(vTimer.slice(-2)) < 11){
                         time.classList.add('blinking');
                     }
@@ -211,7 +214,6 @@ function pauseTimer(uuid) {
             'Content-Type': 'application/json',
         }
     })
-
     .then(response => response.json())
     .then(data => {
         console.log(`pause_timer: ${data.result}`);
@@ -228,7 +230,6 @@ function playTimer(uuid) {
             'Content-Type': 'application/json',
         }
     })
-
     .then(response => response.json())
     .then(data => {
         console.log(`play_timer: ${data.result}`);
@@ -245,7 +246,6 @@ function resetTimer(uuid) {
             'Content-Type': 'application/json',
         }
     })
-
     .then(response => response.json())
     .then(data => {
         console.log(`reset_timer: ${data.result}`);
@@ -262,7 +262,6 @@ function deleteTimer(uuid) {
             'Content-Type': 'application/json',
         }
     })
-
     .then(response => response.json())
     .then(data => {
         console.log(`delete_timer: ${data.result}`);
