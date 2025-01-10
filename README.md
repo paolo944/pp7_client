@@ -24,7 +24,6 @@ Open a terminal and run the following commands
 git clone https://github.com/paolo944/pp7_client.git
 cd pp7_client
 pip3 install -r requirements.txt
-python -m venv ./
 ```
 ## Configuration
 You have to first enable network on ProPresenter by going into Settings->Network then Enable Network.
@@ -48,13 +47,11 @@ To run the app, launch the script app.py.
 On Mac-GNU/Linux:
 ```bash
 # Make sure to be located in the project directory
-source venv/bin/activate
 python3 app.py
 ```
 
 On Windows PowerShell:
 ```
-PS C:\> <venv>\Scripts\Activate.ps1
 python app.py
 ```
 
