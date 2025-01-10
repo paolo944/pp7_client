@@ -276,10 +276,11 @@ fetchStreamData();
 document.getElementById('toggle-dark-mode').addEventListener('click', function() {
     document.body.classList.toggle('dark-mode');
     const button = document.getElementById('toggle-dark-mode');
+    const icon = button.querySelector('i');
     if (document.body.classList.contains('dark-mode')) {
-        button.textContent = 'Mode clair';
+        icon.classList.replace('fa-moon', 'fa-sun');
     } else {
-        button.textContent = 'Mode sombre';
+        icon.classList.replace('fa-sun', 'fa-moon');
     }
 });
 
