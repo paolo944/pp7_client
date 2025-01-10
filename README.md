@@ -16,6 +16,7 @@ answer fastly or review your pull requests.
 ## Requirements
 - python3
 - pip3
+- git
 
 ## Installation
 Open a terminal and run the following commands
