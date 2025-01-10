@@ -83,7 +83,12 @@ function fetchStreamData() {
     const clockContainer = document.getElementById('clock-container');
     const videoContainer = document.getElementById('video-container');
 
+    var videoEnd = 0;
+
     eventSource.onmessage = function(event) {
+        if(videoEnd > 2){
+            videoContainer.innerHTML = "";
+        }
         try {
             const data = JSON.parse(event.data);
             if(data.url == "timer/system_time"){
@@ -93,6 +98,7 @@ function fetchStreamData() {
                 var seconds = date.getSeconds();
                 const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 timeContainer.innerHTML = "Heure: " + formattedTime;
+                videoEnd++;
             }
             else if(data.url == "stage/message"){
                 messageContainer.innerHTML = "Message prompteur: " + data.data;
@@ -178,6 +184,7 @@ function fetchStreamData() {
                     }
                     videoContainer.appendChild(clockName);
                     videoContainer.appendChild(time);
+                    videoEnd = 0;
                 }
             }
         } catch (error) {
@@ -187,8 +194,8 @@ function fetchStreamData() {
 
     eventSource.onerror = function(event) {
         console.error('EventSource failed:', event);
-        timeContainer.innerHTML ="PROPRESENTER NON CONNECTE";
-        timeContainer.classList.add('ALERT');
+        messageContainer.innerHTML = "PP7 non connecté";
+        messageContainer.classList.add("ALERT");
         eventSource.close();
     };
 
