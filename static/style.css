@@ -3,14 +3,22 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px; /* Ajoutez un padding pour l'espace autour du contenu */
+    padding: 20px;
+    background-color: #ffffff; /* Couleur de fond par défaut */
+    color: #000000; /* Couleur du texte par défaut */
+    transition: background-color 0.3s, color 0.3s; /* Transition pour le changement de couleur */
+}
+
+body.dark-mode {
+    background-color: #121212; /* Couleur de fond en mode sombre */
+    color: #ffffff; /* Couleur du texte en mode sombre */
 }
 
 .container {
-    width: 80%; /* Ajustez la largeur selon vos besoins */
-    max-width: 600px; /* Limitez la largeur maximale pour les grands écrans */
-    margin: 0 auto; /* Centre le conteneur horizontalement */
-    text-align: left; /* Alignez le texte à gauche */
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
 }
 
 h1, h2 {
@@ -48,7 +56,7 @@ form button {
     align-items: center;
     gap: 10px;
     width: 100%;
-    justify-content: flex-start; /* Alignez les éléments à gauche */
+    justify-content: flex-start;
     margin-bottom: 20px;
 }
 
@@ -74,7 +82,7 @@ form button {
     margin-bottom: 10px;
 }
 
-.form-container input[type="number"] {
+.form-container input[type="text"], .form-container input[type="number"] {
     padding: 10px;
     font-size: 16px;
     box-sizing: border-box;

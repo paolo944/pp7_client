@@ -271,5 +271,51 @@ function deleteTimer(uuid) {
     });
 }
 
-// Appeler la fonction fetchStreamData une fois au chargement de la page
 fetchStreamData();
+
+document.getElementById('toggle-dark-mode').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    const button = document.getElementById('toggle-dark-mode');
+    if (document.body.classList.contains('dark-mode')) {
+        button.textContent = 'Mode clair';
+    } else {
+        button.textContent = 'Mode sombre';
+    }
+});
+
+document.getElementById('toggle-language').addEventListener('click', function() {
+    const button = document.getElementById('toggle-language');
+    if (button.textContent === 'Français') {
+        button.textContent = 'English';
+        changeLanguageToEnglish();
+    } else {
+        button.textContent = 'Français';
+        changeLanguageToFrench();
+    }
+});
+
+function changeLanguageToEnglish() {
+    document.querySelector('h1').textContent = 'Client PP7 Hillsong Paris';
+    document.getElementById('user-stage-msg').placeholder = 'Send prompt message';
+    document.getElementById('send').textContent = 'Send';
+    document.getElementById('delete').textContent = 'Delete';
+    document.querySelector('.form-container h2').textContent = 'Add Clock';
+    document.querySelector('label[for="clock_name"]').textContent = 'Name';
+    document.querySelector('label[for="hours"]').textContent = 'Hours:';
+    document.querySelector('label[for="minutes"]').textContent = 'Minutes:';
+    document.querySelector('label[for="seconds"]').textContent = 'Seconds:';
+    document.getElementById('submit-button').textContent = 'Add';
+}
+
+function changeLanguageToFrench() {
+    document.querySelector('h1').textContent = 'Client PP7 Hillsong Paris';
+    document.getElementById('user-stage-msg').placeholder = 'Envoyer msg prompteur';
+    document.getElementById('send').textContent = 'Envoyer';
+    document.getElementById('delete').textContent = 'Supprimer';
+    document.querySelector('.form-container h2').textContent = 'Ajouter Clock';
+    document.querySelector('label[for="clock_name"]').textContent = 'Nom';
+    document.querySelector('label[for="hours"]').textContent = 'Heures:';
+    document.querySelector('label[for="minutes"]').textContent = 'Minutes:';
+    document.querySelector('label[for="seconds"]').textContent = 'Secondes:';
+    document.getElementById('submit-button').textContent = 'Ajouter';
+}
