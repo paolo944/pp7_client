@@ -4,14 +4,14 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: #ffffff; /* Couleur de fond par défaut */
-    color: #000000; /* Couleur du texte par défaut */
+    background-color: #121212; /* Couleur de fond par défaut */
+    color: #ffffff; /* Couleur du texte par défaut */
     transition: background-color 0.3s, color 0.3s; /* Transition pour le changement de couleur */
 }
 
-body.dark-mode {
-    background-color: #121212; /* Couleur de fond en mode sombre */
-    color: #ffffff; /* Couleur du texte en mode sombre */
+body.light-mode {
+    background-color: #ffffff; /* Couleur de fond en mode sombre */
+    color: #000000; /* Couleur du texte en mode sombre */
 }
 
 .container {
@@ -120,4 +120,10 @@ form button {
 .ALERT {
     background-color: red;
     padding: 10px;
+}
+
+#joke {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
 }

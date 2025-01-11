@@ -291,13 +291,13 @@ function deleteTimer(uuid) {
 fetchStreamData();
 
 document.getElementById('toggle-dark-mode').addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
+    document.body.classList.toggle('light-mode');
     const button = document.getElementById('toggle-dark-mode');
     const icon = button.querySelector('i');
-    if (document.body.classList.contains('dark-mode')) {
-        icon.classList.replace('fa-moon', 'fa-sun');
-    } else {
+    if (document.body.classList.contains('light-mode')) {
         icon.classList.replace('fa-sun', 'fa-moon');
+    } else {
+        icon.classList.replace('fa-moon', 'fa-sun');
     }
 });
 
