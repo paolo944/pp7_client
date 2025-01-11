@@ -17,7 +17,8 @@ class Stream:
             "stage/message",
             "timers/current",
             "timer/video_countdown",
-            "timer/system_time"
+            "timer/system_time",
+            "status/slide"
         ]
 
         json_data = json.dumps(data)

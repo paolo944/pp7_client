@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context
 from pp7_api import stage, stream, timer
+import requests, json
 
 stage = stage.Stage()
 stream = stream.Stream()
@@ -63,6 +64,22 @@ def post_timer():
     print(f"Received time: {hours}:{minutes}:{seconds}")
     result = timer.post(data)
     return jsonify({'result': result})
+
+@app.route('/joke', methods=['GET'])
+def joke():
+    with open('info.json', 'r') as config_file:
+        config = json.load(config_file)
+        url = f'{config["url"]}find_my_mouse'
+    print(url)
+    headers = {
+        'accept': '*/*'
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 204:
+        return jsonify({'result': 'True'})
+    else:
+        print(f'Échec de la requête Joke. Code de statut : {response.status_code}')
+        return jsonify({'result': 'False'})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

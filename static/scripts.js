@@ -81,6 +81,7 @@ function fetchStreamData() {
     const messageContainer = document.getElementById('stage-message-container');
     const clockContainer = document.getElementById('clock-container');
     const videoContainer = document.getElementById('video-container');
+    const slideContainer = document.getElementById('slide-text-container');
 
     var videoEnd = 0;
 
@@ -100,7 +101,7 @@ function fetchStreamData() {
                 videoEnd++;
             }
             else if(data.url == "stage/message"){
-                messageContainer.innerHTML = "Message prompteur: " + data.data;
+                messageContainer.innerHTML = data.data != "" ? "Message prompteur: " + data.data : "";
             }
             else if(data.url == "timers/current"){
                 clockContainer.innerHTML= "";
@@ -189,6 +190,18 @@ function fetchStreamData() {
                     videoContainer.appendChild(time);
                     videoEnd = 0;
                 }
+            }
+            else if(data.url == "status/slide"){
+                slideContainer.innerHTML = "";
+                slide = data.data;
+                current_text = slide.current.text;
+                next_text = slide.next.text;
+                const current = document.createElement('h3');
+                const next = document.createElement('h3');
+                current.innerHTML = current_text != "" ? `Slide actuelle: ${current_text}` : "";
+                next.innerHTML = next_text != "" ? `Slide suivante: ${next_text}` : "";
+                slideContainer.appendChild(current);
+                slideContainer.appendChild(next);
             }
         } catch (error) {
             console.error('Failed to parse JSON:', error);
@@ -293,6 +306,20 @@ document.getElementById('toggle-language').addEventListener('click', function() 
         button.textContent = 'Français';
         changeLanguageToFrench();
     }
+});
+
+document.getElementById('joke').addEventListener('click', function() {
+    fetch(`/joke`, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Very funny!');
+        console.log('good joke!');
+    })
+    .catch(error => {
+        console.error('your joke didn\'t work');
+    });
 });
 
 function changeLanguageToEnglish() {
