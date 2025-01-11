@@ -60,6 +60,14 @@ form button {
     margin-bottom: 20px;
 }
 
+.clock-container button {
+    display: inline-block;
+}
+  
+.clock-container.invisible-clock button {
+    display: none;
+}
+
 .buttons-container {
     display: flex;
     gap: 10px;
@@ -126,4 +134,8 @@ form button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+}
+
+.invisible{
+    display:none;
 }

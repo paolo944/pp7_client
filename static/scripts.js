@@ -1,3 +1,5 @@
+var editor_mode = true;
+
 document.getElementById('stage_msg').addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -105,73 +107,102 @@ function fetchStreamData() {
                 messageContainer.innerHTML = data.data != "" ? "Message prompteur: " + data.data : "";
             }
             else if(data.url == "timers/current"){
-                clockContainer.innerHTML= "";
                 for(const timer of data.data){
-                    const h3Element = document.createElement('h3');
-                    const clockName = document.createTextNode(`${timer.id.name}: `);
-                    const time = document.createElement('span');
-                    time.textContent = `${timer.time}`;
-                    const clockContainerElement = document.createElement('div');
-                    clockContainerElement.classList.add('clock-container');
+                    let existingClock = null;
+                    const clockElements = clockContainer.querySelectorAll('.clock-container h3');
+                    clockElements.forEach(clockElement => {
+                        if (clockElement.textContent.includes(timer.id.name)) {
+                            existingClock = clockElement;
+                        }
+                    });
+                    
+                    if (existingClock) {
+                        const timeElement = existingClock.querySelector('span');
+                        timeElement.textContent = `${timer.time}`;
+                        timeElement.classList.remove('status-running', 'status-overrun', 'status-stopped');
+                        switch (timer.state) {
+                            case 'running':
+                                timeElement.classList.add('status-running');
+                                break;
+                            case 'overrunning':
+                                timeElement.classList.add('status-overrun');
+                                break;
+                            case 'overran':
+                                timeElement.classList.add('status-overrun');
+                                break;
+                            case 'stopped':
+                                timeElement.classList.add('status-stopped');
+                                break;
+                            default:
+                                break;
+                        }
+                    } else {
+                        const h3Element = document.createElement('h3');
+                        const clockName = document.createTextNode(`${timer.id.name}: `);
+                        const time = document.createElement('span');
+                        time.textContent = `${timer.time}`;
+                        const clockContainerElement = document.createElement('div');
+                        clockContainerElement.classList.add('clock-container');
 
-                    switch (timer.state) {
-                        case 'running':
-                            time.classList.add('status-running');
-                            break;
-                        case 'overrunning':
-                            time.classList.add('status-overrun');
-                            break;
-                        case 'overran':
-                            time.classList.add('status-overrun');
-                            break;
-                        case 'stopped':
-                            time.classList.add('status-stopped');
-                            break;
-                        default:
-                            break;
+                        switch (timer.state) {
+                            case 'running':
+                                time.classList.add('status-running');
+                                break;
+                            case 'overrunning':
+                                time.classList.add('status-overrun');
+                                break;
+                            case 'overran':
+                                time.classList.add('status-overrun');
+                                break;
+                            case 'stopped':
+                                time.classList.add('status-stopped');
+                                break;
+                            default:
+                                break;
+                        }
+
+                        const delete_timer = document.createElement('button');
+                        const delete_icon = document.createElement('i');
+                        delete_icon.classList.add('fa-solid', 'fa-trash');
+                        delete_timer.appendChild(delete_icon);
+                        delete_timer.classList.add('button-container');
+                        delete_timer.addEventListener('click', () => deleteTimer(timer.id.uuid));
+
+                        const pause_timer = document.createElement('button');
+                        pause_timer.classList.add('button-container');
+                        if(timer.state != "stopped"){
+                            const pause_icon = document.createElement('i');
+                            pause_icon.classList.add('fa-solid', 'fa-stop');
+                            pause_timer.appendChild(pause_icon);
+                            pause_timer.addEventListener('click', () => pauseTimer(timer.id.uuid));
+                        }
+                        else{
+                            const play_icon = document.createElement('i');
+                            play_icon.classList.add('fa-solid', 'fa-play');
+                            pause_timer.appendChild(play_icon);
+                            pause_timer.addEventListener('click', () => playTimer(timer.id.uuid));
+                        }
+
+                        const reset_timer = document.createElement('button');
+                        reset_timer.classList.add('button-container');
+                        const reset_icon = document.createElement('i');
+                        reset_icon.classList.add('fa-solid', 'fa-rotate');
+                        reset_timer.appendChild(reset_icon);
+                        reset_timer.addEventListener('click', () => resetTimer(timer.id.uuid));
+
+                        const buttonsContainer = document.createElement('div');
+                        buttonsContainer.classList.add('buttons-container');
+                        buttonsContainer.appendChild(pause_timer);
+                        buttonsContainer.appendChild(reset_timer);
+                        buttonsContainer.appendChild(delete_timer);
+
+                        h3Element.appendChild(clockName);
+                        h3Element.appendChild(time);
+                        clockContainerElement.appendChild(h3Element);
+                        clockContainerElement.appendChild(buttonsContainer);
+
+                        clockContainer.appendChild(clockContainerElement);
                     }
-
-                    const delete_timer = document.createElement('button');
-                    const delete_icon = document.createElement('i');
-                    delete_icon.classList.add('fa-solid', 'fa-trash');
-                    delete_timer.appendChild(delete_icon);
-                    delete_timer.classList.add('button-container');
-                    delete_timer.addEventListener('click', () => deleteTimer(timer.id.uuid));
-
-                    const pause_timer = document.createElement('button');
-                    pause_timer.classList.add('button-container');
-                    if(timer.state != "stopped"){
-                        const pause_icon = document.createElement('i');
-                        pause_icon.classList.add('fa-solid', 'fa-stop');
-                        pause_timer.appendChild(pause_icon);
-                        pause_timer.addEventListener('click', () => pauseTimer(timer.id.uuid));
-                    }
-                    else{
-                        const play_icon = document.createElement('i');
-                        play_icon.classList.add('fa-solid', 'fa-play');
-                        pause_timer.appendChild(play_icon);
-                        pause_timer.addEventListener('click', () => playTimer(timer.id.uuid));
-                    }
-
-                    const reset_timer = document.createElement('button');
-                    reset_timer.classList.add('button-container');
-                    const reset_icon = document.createElement('i');
-                    reset_icon.classList.add('fa-solid', 'fa-rotate');
-                    reset_timer.appendChild(reset_icon);
-                    reset_timer.addEventListener('click', () => resetTimer(timer.id.uuid));
-
-                    const buttonsContainer = document.createElement('div');
-                    buttonsContainer.classList.add('buttons-container');
-                    buttonsContainer.appendChild(pause_timer);
-                    buttonsContainer.appendChild(reset_timer);
-                    buttonsContainer.appendChild(delete_timer);
-
-                    h3Element.appendChild(clockName);
-                    h3Element.appendChild(time);
-                    clockContainerElement.appendChild(h3Element);
-                    clockContainerElement.appendChild(buttonsContainer);
-
-                    clockContainer.appendChild(clockContainerElement);
                 }
             }
             else if(data.url == "timer/video_countdown"){
@@ -310,6 +341,14 @@ document.getElementById('toggle-language').addEventListener('click', function() 
         button.textContent = 'Français';
         changeLanguageToFrench();
     }
+});
+
+document.getElementById('toggle-editor-mode').addEventListener('click', function() {
+    const add_timer = document.getElementById('clock-editor');
+    add_timer.classList.toggle('invisible');
+    const clockContainer = document.getElementById('clock-container');
+    clockContainer.classList.toggle('invisible-clock');
+    editor_mode = !editor_mode;
 });
 
 document.getElementById('joke').addEventListener('click', function() {
