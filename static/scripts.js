@@ -82,6 +82,7 @@ function fetchStreamData() {
     const clockContainer = document.getElementById('clock-container');
     const videoContainer = document.getElementById('video-container');
     const slideContainer = document.getElementById('slide-text-container');
+    const presentationContainer = document.getElementById('presentation-container');
 
     var videoEnd = 0;
 
@@ -202,6 +203,9 @@ function fetchStreamData() {
                 next.innerHTML = next_text != "" ? `Slide suivante: ${next_text}` : "";
                 slideContainer.appendChild(current);
                 slideContainer.appendChild(next);
+            }
+            else if(data.url == "presentation/active"){
+                presentationContainer.innerHTML = data.data != "" ? data.data : "";
             }
         } catch (error) {
             console.error('Failed to parse JSON:', error);
