@@ -45,7 +45,8 @@ class Stream:
                         try:
                             json_line = json.loads(line.decode('utf-8'))
                             if(json_line["url"] == "presentation/active"):
-                                json_line["data"] = json_line["data"]["presentation"]["id"]["name"]
+                                if(json_line["data"]["presentation"] != None):
+                                    json_line["data"] = json_line["data"]["presentation"]["id"]["name"]
                             json_output = json.dumps(json_line)
                             yield f"data: {json_output}\n\n"
                         except json.JSONDecodeError:
