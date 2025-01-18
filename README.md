@@ -41,6 +41,8 @@ network, go in the file pp7_client/info.json and add this line
 Replace  {ip adress} by the ip adress of the machine on which ProPresenter is running and {port} by the port number 
 of ProPresenter.
 
+If the server runs on the same machien as the ProPresenter app, just replace {ip adress} by 127.0.0.1 .
+
 ## Running the app
 To run the app, launch the script app.py.
 
