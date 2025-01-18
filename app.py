@@ -1,12 +1,20 @@
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context
-from pp7_api import stage, stream, timer
+from flask_socketio import SocketIO, emit
+from pp7_api import stage, stream, timer, subtitle
 import requests, json
+from threading import Thread
+import time
 
 stage = stage.Stage()
 stream = stream.Stream()
 timer = timer.Timer()
+subtitle = subtitle.Subtitle()
 
 app = Flask(__name__)
+
+socketio = SocketIO(app)
+
+sse_clients = {}
 
 # Route pour la page d'accueil
 @app.route('/')
@@ -80,6 +88,19 @@ def joke():
     else:
         print(f'Échec de la requête Joke. Code de statut : {response.status_code}')
         return jsonify({'result': 'False'})
+    
+@app.route("/subtitles")
+def index():
+    return render_template("subtitles.html")
+
+@app.route('/subtitles/update')
+def subtitle_stream():
+    return Response(subtitle.update(), mimetype='text/event-stream')
+
+@app.errorhandler(400)
+def bad_request(error):
+    app.logger.error(f"Bad request: {request.data}")
+    return jsonify({'message': 'Bad request'}), 400
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
