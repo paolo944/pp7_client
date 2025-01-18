@@ -6,15 +6,21 @@ const eventSource = new EventSource('/subtitles/update');
             const subtitleElement = document.getElementById("subtitle");
             subtitleElement.innerHTML = ""
             if(data.type == "louanges"){
+                document.body.classList.remove('light-mode');
+                subtitleElement.classList.add("louanges");
                 subtitleElement.textContent = data.subtitle;
             }
             else if(data.type == "versets"){
-                const refContainer = document.createElement('h3');
+                document.body.classList.add('light-mode');
+                subtitleElement.classList.remove('louanges');
+                const refContainer = document.createElement('p');
                 const versetsContainer = document.createElement('p');
+                refContainer.classList.add('refs');
+                versetsContainer.classList.add('versets');
                 refContainer.textContent = data.ref;
                 versetsContainer.textContent = data.versets
-                subtitleElement.appendChild(refContainer);
                 subtitleElement.appendChild(versetsContainer);
+                subtitleElement.appendChild(refContainer);
             }
             else{
                 console.error(data);
