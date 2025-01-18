@@ -358,7 +358,6 @@ document.getElementById('joke').addEventListener('click', function() {
     .then(response => response.json())
     .then(data => {
         alert('Very funny!');
-        console.log('good joke!');
     })
     .catch(error => {
         console.error('your joke didn\'t work');

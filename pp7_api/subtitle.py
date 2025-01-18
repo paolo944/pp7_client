@@ -32,7 +32,7 @@ class Subtitle:
             return
 
         buffer = b''
-        data = {"type": None, "subtitle": None}
+        data = {"type": None}
         for chunk in response.iter_content(chunk_size=1):
             buffer += chunk
             if b'\r\n\r\n' in buffer:
@@ -40,22 +40,27 @@ class Subtitle:
                 for line in lines[:-1]:
                     if line:
                         try:
-                            data["subtitle"] = ""
+                            data["subtitle"] = None
+                            data["ref"] = None
+                            data["versets"] = None
                             json_line = json.loads(line.decode('utf-8'))
                             if(json_line["url"] == "playlist/active"):
                                 if("Louange" in json_line["data"]["presentation"]["playlist"]["name"]):
-                                    data["type"] = "louange"
+                                    data["type"] = "louanges"
                                 elif("Versets" in json_line["data"]["presentation"]["playlist"]["name"]):
                                     data["type"] = "versets"
                             elif(json_line["url"] == "status/slide"):
-                                if(data["type"] == "louange"):
+                                if(data["type"] == "louanges"):
                                     paroles = json_line["data"]["current"]["text"].split('\n')
                                     paroles = [paroles[i] for i in range(0, len(paroles), 2)]
                                     paroles = '\n'.join(paroles)
                                     data["subtitle"] = paroles
                                 elif(data["type"] == "versets"):
-                                    paroles = json_line["data"]["current"]["text"]
-                                    data["subtitle"] = paroles
+                                    text = json_line["data"]["current"]["text"].split('\n\n')[0]
+                                    ref = text.split('\n')[0]
+                                    versets = text.split('\n')[1]
+                                    data["ref"] = ref
+                                    data["versets"] = versets
                                 json_output = json.dumps(data)
                                 print(data)
                                 yield f"data: {json_output}\n\n"

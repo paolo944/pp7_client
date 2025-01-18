@@ -4,44 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sous-titres en direct</title>
-    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='subtitles.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: transparent;
-        }
-
-        .subtitle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Work Sans', sans-serif;
-            font-size: 48px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            text-align: center;
-        }
-    </style>
+    <script defer src="{{ url_for('static', filename='subtitles.js') }}"></script>
 </head>
 <body>
     <div class="subtitle" id="subtitle"></div>
-
-    <script>
-        const eventSource = new EventSource('/subtitles/update');
-
-        // Écouter les mises à jour des sous-titres
-        eventSource.onmessage = function(event) {
-            const data = JSON.parse(event.data);
-            const subtitleElement = document.getElementById("subtitle");
-            subtitleElement.textContent = data.subtitle;
-        };
-
-        eventSource.onerror = function(event) {
-            console.error('EventSource failed:', event);
-        };
-    </script>
 </body>
 </html>
