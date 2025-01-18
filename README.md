@@ -57,4 +57,11 @@ On Windows PowerShell:
 python app.py
 ```
 
-A url wil appear in the terminal, go to it on any client which is on the same network and enjoy. 
+A url wil appear in the terminal, go to it on any client which is on the same network to get the main client.
+
+If you want the subtitles page which updates automaticly, go to the url/subtitles .
+
+The subtitles are well suited for OBS if you create a scene using a web brower.
+
+## ⚠️ **DISCLAIMER** ⚠️
+The subtitles format is suited for my church's specific formats, so will very probably have to adapt it to your format.
