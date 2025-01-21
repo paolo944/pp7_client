@@ -93,6 +93,10 @@ def joke():
 def index():
     return render_template("subtitles.html")
 
+@app.route('/subtitles/update')
+def subtitle_stream():
+    return Response(subtitle.update(), mimetype='text/event-stream')
+
 @app.errorhandler(400)
 def bad_request(error):
     app.logger.error(f"Bad request: {request.data}")
