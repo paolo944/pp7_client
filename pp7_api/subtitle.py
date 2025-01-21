@@ -14,7 +14,6 @@ class Subtitle:
         }
 
         data = [
-            "playlist/active",
             "status/slide"
         ]
 
@@ -44,19 +43,16 @@ class Subtitle:
                             data["ref"] = None
                             data["versets"] = None
                             json_line = json.loads(line.decode('utf-8'))
-                            if(json_line["url"] == "playlist/active"):
-                                if("Louange" in json_line["data"]["presentation"]["playlist"]["name"]):
-                                    data["type"] = "louanges"
-                                elif("Versets" in json_line["data"]["presentation"]["playlist"]["name"]):
-                                    data["type"] = "versets"
-                            elif(json_line["url"] == "status/slide"):
+                            if(json_line["url"] == "status/slide"):
+                                text = json_line["data"]["current"]["text"]
+                                data["type"] = "versets" if any(char.isdigit() for char in text) else "louanges"
                                 if(data["type"] == "louanges"):
-                                    paroles = json_line["data"]["current"]["text"].split('\n')
+                                    paroles = text.split('\n')
                                     paroles = [paroles[i] for i in range(0, len(paroles), 2)]
                                     paroles = '\n'.join(paroles)
                                     data["subtitle"] = paroles
                                 elif(data["type"] == "versets"):
-                                    text = json_line["data"]["current"]["text"].split('\n\n')[0]
+                                    text = text.split('\n\n')[0]
                                     ref = text.split('\n')[0]
                                     versets = text.split('\n')[1]
                                     data["ref"] = ref
