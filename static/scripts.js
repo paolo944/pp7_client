@@ -1,4 +1,15 @@
-var editor_mode = true;
+let editor_mode = true;
+
+let existingClocks = [];
+
+function removeClock(timers, id) {
+    const index = timers.indexOf(id);
+
+    if (index !== -1) {
+        timers.splice(index, 1);
+    }
+    document.getElementById(id).remove();
+}
 
 document.getElementById('stage_msg').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -108,41 +119,59 @@ function fetchStreamData() {
             }
             else if(data.url == "timers/current"){
                 for(const timer of data.data){
-                    let existingClock = null;
-                    const clockElements = clockContainer.querySelectorAll('.clock-container h3');
-                    clockElements.forEach(clockElement => {
-                        if (clockElement.textContent.includes(timer.id.name)) {
-                            existingClock = clockElement;
+                    if (existingClocks.indexOf(timer.id.name) != -1) {
+                        const clockContainerElement = document.getElementById(timer.id.name);
+                        
+                        const time = clockContainerElement.children[0].children[0];
+                        time.textContent = `${timer.time}`;
+                        time.classList.remove('status-running', 'status-overrun', 'status-stopped');
+                        
+                        const buttonsContainer = clockContainerElement.children[1];
+                        const pause_timer = buttonsContainer.children[0];
+
+                        pause_timer.innerHTML = "";
+
+                        if(timer.state != "stopped"){
+                            const pause_icon = document.createElement('i');
+                            pause_icon.classList.add('fa-solid', 'fa-stop');
+                            pause_timer.appendChild(pause_icon);
+                            pause_timer.addEventListener('click', () => pauseTimer(timer.id.uuid));
                         }
-                    });
-                    
-                    if (existingClock) {
-                        const timeElement = existingClock.querySelector('span');
-                        timeElement.textContent = `${timer.time}`;
-                        timeElement.classList.remove('status-running', 'status-overrun', 'status-stopped');
+                        else{
+                            const play_icon = document.createElement('i');
+                            play_icon.classList.add('fa-solid', 'fa-play');
+                            pause_timer.appendChild(play_icon);
+                            pause_timer.addEventListener('click', () => playTimer(timer.id.uuid));
+                        }
+
                         switch (timer.state) {
                             case 'running':
-                                timeElement.classList.add('status-running');
+                                time.classList.add('status-running');
                                 break;
                             case 'overrunning':
-                                timeElement.classList.add('status-overrun');
+                                time.classList.add('status-overrun');
                                 break;
                             case 'overran':
-                                timeElement.classList.add('status-overrun');
+                                time.classList.add('status-overrun');
                                 break;
                             case 'stopped':
-                                timeElement.classList.add('status-stopped');
+                                time.classList.add('status-stopped');
                                 break;
                             default:
                                 break;
                         }
                     } else {
+                        existingClocks.push(timer.id.name);
+                        
                         const h3Element = document.createElement('h3');
                         const clockName = document.createTextNode(`${timer.id.name}: `);
+                        
                         const time = document.createElement('span');
                         time.textContent = `${timer.time}`;
                         const clockContainerElement = document.createElement('div');
+                        
                         clockContainerElement.classList.add('clock-container');
+                        clockContainerElement.id = timer.id.name;
 
                         switch (timer.state) {
                             case 'running':
@@ -166,7 +195,7 @@ function fetchStreamData() {
                         delete_icon.classList.add('fa-solid', 'fa-trash');
                         delete_timer.appendChild(delete_icon);
                         delete_timer.classList.add('button-container');
-                        delete_timer.addEventListener('click', () => deleteTimer(timer.id.uuid));
+                        delete_timer.addEventListener('click', () => deleteTimer(timer.id.uuid, timer.id.name));
 
                         const pause_timer = document.createElement('button');
                         pause_timer.classList.add('button-container');
@@ -236,7 +265,7 @@ function fetchStreamData() {
                 slideContainer.appendChild(next);
             }
             else if(data.url == "presentation/active"){
-                presentationContainer.innerHTML = data.data != "" ? data.data : "";
+                presentationContainer.innerHTML = data.data != "" || data.data != null ? data.data : "";
             }
         } catch (error) {
             console.error('Failed to parse JSON:', error);
@@ -303,7 +332,7 @@ function resetTimer(uuid) {
     });
 }
 
-function deleteTimer(uuid) {
+function deleteTimer(uuid, id) {
     fetch(`/timer/${uuid}`, {
         method: 'DELETE',
         headers: {
@@ -313,6 +342,7 @@ function deleteTimer(uuid) {
     .then(response => response.json())
     .then(data => {
         console.log(`delete_timer: ${data.result}`);
+        removeClock(existingClocks, id);
     })
     .catch(error => {
         console.error('Erreur:', error);
