@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room
 from pp7_api import stage, stream, timer, subtitle
 import requests, json
 from threading import Thread
@@ -22,14 +22,14 @@ def home():
     return render_template('index.html')
 
 # Route pour obtenir des données de l'API
-@app.route('/stage/send_msg', methods=['PUT'])
+@app.route('/stage/msg', methods=['PUT'])
 def stage_send_msg():
     data = request.get_json()
     msg = data.get('user_input')
     result = stage.send_msg(msg)
     return jsonify({'result': result})
 
-@app.route('/stage/delete_msg', methods=['DELETE'])
+@app.route('/stage/msg', methods=['DELETE'])
 def stage_delete_msg():
     result = stage.delete_msg()
     return jsonify({'result': result})
@@ -89,13 +89,9 @@ def joke():
         print(f'Échec de la requête Joke. Code de statut : {response.status_code}')
         return jsonify({'result': 'False'})
     
-@app.route("/subtitles")
+@app.route("/subtitles", methods=['GET'])
 def index():
     return render_template("subtitles.html")
-
-@app.route('/subtitles/update')
-def subtitle_stream():
-    return Response(subtitle.update(), mimetype='text/event-stream')
 
 @app.errorhandler(400)
 def bad_request(error):

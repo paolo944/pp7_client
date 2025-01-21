@@ -18,7 +18,7 @@ document.getElementById('stage_msg').addEventListener('submit', function(event) 
     const buttonId = event.submitter ? event.submitter.id : event.target.id;
 
     if(buttonId == "send"){
-        fetch('/stage/send_msg', {
+        fetch('/stage/msg', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ document.getElementById('stage_msg').addEventListener('submit', function(event) 
         });
     }
     else if(buttonId == "delete"){
-        fetch('/stage/delete_msg', {
+        fetch('/stage/msg', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -419,3 +419,54 @@ function changeLanguageToFrench() {
     document.querySelector('label[for="seconds"]').textContent = 'Secondes:';
     document.getElementById('submit-button').textContent = 'Ajouter';
 }
+
+document.getElementById('subtitle-live').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const user_name = document.getElementById('subtitle-nom').value;
+    const user_title = document.getElementById('subtitle-title').value;
+    const buttonId = event.submitter ? event.submitter.id : event.target.id;
+
+    if(buttonId == "send"){
+        fetch('/subtitle', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: user_name, title: user_title })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const resultContainer = document.getElementById('result-container');
+            resultContainer.innerHTML = data.result ? "" : "Erreur, message non envoyé";
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+        });
+    }
+    else if(buttonId == "delete"){
+        fetch('/subtitle', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const resultContainer = document.getElementById('result-container');
+            const user_name = document.getElementById('subtitle-nom');
+            const user_title = document.getElementById('subtitle-title');
+            if(data.result){
+                resultContainer.innerHTML =  '';
+                user_name.placeholder = 'Nom';
+                user_title.placeholder = 'Titre';
+            }
+            else{
+                resultContainer.innerHTML =  "Erreur, message non supprimé";
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+        });
+    }
+});
