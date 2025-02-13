@@ -58,7 +58,6 @@ class Subtitle:
                                     data["ref"] = ref
                                     data["versets"] = versets
                                 json_output = json.dumps(data)
-                                print(data)
                                 yield f"data: {json_output}\n\n"
                         except json.JSONDecodeError:
                             print(f"Erreur de décodage JSON pour la ligne : {line}")
