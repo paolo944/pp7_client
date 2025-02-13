@@ -48,7 +48,7 @@ class Subtitle:
                                 data["type"] = "versets" if any(char.isdigit() for char in text) else "louanges"
                                 if(data["type"] == "louanges"):
                                     paroles = text.split('\n')
-                                    paroles = [paroles[0], paroles[2]]
+                                    paroles = [paroles[i] for i in range(0, len(paroles), 2)]
                                     paroles = '\n'.join(paroles)
                                     data["subtitle"] = paroles
                                 elif(data["type"] == "versets"):
