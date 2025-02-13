@@ -43,6 +43,7 @@ class Subtitle:
                             data["ref"] = None
                             data["versets"] = None
                             json_line = json.loads(line.decode('utf-8'))
+                            print(json_line)
                             if(json_line["url"] == "status/slide"):
                                 text = json_line["data"]["current"]["text"]
                                 data["type"] = "versets" if any(char.isdigit() for char in text) else "louanges"
@@ -52,7 +53,7 @@ class Subtitle:
                                     paroles = '\n'.join(paroles)
                                     data["subtitle"] = paroles
                                 elif(data["type"] == "versets"):
-                                    text = text.split('\n\n')[0]
+                                    text = text.split('\r')[0]
                                     ref = text.split('\n')[0]
                                     versets = text.split('\n')[1]
                                     data["ref"] = ref
