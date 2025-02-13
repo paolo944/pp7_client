@@ -8,9 +8,13 @@ const eventSource = new EventSource('/subtitles/update');
             if(data.type == "louanges"){
                 document.body.classList.remove('light-mode');
                 subtitleElement.classList.add("louanges");
-                const louanges = document.createElement('p');
-                louanges.textContent = data.subtitle;
-                subtitleElement.appendChild(louanges);
+                const louanges = data.subtitles.split('\n');
+                const louanges1 = document.createElement('p');
+                louanges1.textContent = louanges[0];
+                const louanges2 = document.createElement('p');
+                louanges2.textContent = louanges[1];
+                subtitleElement.appendChild(louanges1);
+                subtitleElement.appendChild(louanges2);
             }
             else if(data.type == "versets"){
                 document.body.classList.add('light-mode');

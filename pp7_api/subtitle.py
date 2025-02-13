@@ -43,7 +43,6 @@ class Subtitle:
                             data["ref"] = None
                             data["versets"] = None
                             json_line = json.loads(line.decode('utf-8'))
-                            print(json_line)
                             if(json_line["url"] == "status/slide"):
                                 text = json_line["data"]["current"]["text"]
                                 data["type"] = "versets" if any(char.isdigit() for char in text) else "louanges"
