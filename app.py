@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context
-from flask_socketio import SocketIO, emit, join_room, leave_room
 from pp7_api import stage, stream, timer, subtitle
 import requests, json
 from threading import Thread
@@ -11,8 +10,6 @@ timer = timer.Timer()
 subtitle = subtitle.Subtitle()
 
 app = Flask(__name__)
-
-socketio = SocketIO(app)
 
 sse_clients = {}
 
